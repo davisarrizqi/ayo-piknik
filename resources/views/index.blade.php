@@ -19,15 +19,15 @@
         <div class="flex navigator-contextor right w-full">
             <div class="flex w-full h-14 my-auto justify-end mr-10 gap-7">
                 <div class="unit h-fit my-auto px-5 py-1 rounded-md outline outline-1">
-                    <button class="text-lg">
+                    <a href="/login" class="text-lg">
                         Login
-                    </button>
+                    </a>
                 </div>
 
                 <div class="unit h-fit my-auto px-5 py-1 rounded-md outline outline-1">
-                    <button class="text-lg">
+                    <a href="/register" class="text-lg">
                         Register
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
