@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Masuk Akun</title>
-    <link rel="stylesheet" href="custom/plane.css">
     @vite('resources/css/app.css')
 </head>
 <body class="m-0 p-0 bg-black/10">
