@@ -8,8 +8,13 @@ use Illuminate\Support\Facades\Session;
 
 class TrafficController extends Controller
 {
+    public function getDetail(): View{
+        return view('detail');
+    }   
+
     public function index():View {
-        return view('index');
+        if(1+1 == 2) return view('userIndex');
+        else return view('index');
     }
 
     public function loginPage():View {
@@ -22,5 +27,17 @@ class TrafficController extends Controller
         if(Session::has('token')) {
             return view('main');
         } else return view('register');
+    }
+
+    public function dashboardPage():View {
+        return view('dashboard');
+    }
+
+    public function findPlace(Request $request){
+        dd($request->all());
+    }
+
+    public function findVisitation():View{
+        return view('find-visitation');
     }
 }

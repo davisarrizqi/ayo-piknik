@@ -48,7 +48,7 @@
             </div>
 
             <div class="w-[60%] h-full rounded-2xl bg-black/20">
-                <img src="images/side/login-image.png" alt="" class="w-full rounded-2xl shadow-2xl">
+                <img src="images/side/login-image.png" alt="" class="object-cover w-full rounded-2xl shadow-2xl">
             </div>
         </div>
     </div>

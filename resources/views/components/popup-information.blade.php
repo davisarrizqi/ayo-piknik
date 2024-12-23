@@ -21,7 +21,7 @@
         </div>
 
         <div class="flex justify-start gap-5 text-white/80 information-content-contextor w-[80%] mx-auto rounded-xl mt-6">
-            <button onclick="changeVisibility()" class="bg-blue-500/80 hover:scale-110 duration-300 ease-in-out hover:bg-yellow-400 hover:text-blue-600 px-5 py-2 rounded-xl drop-shadow-xl">
+            <button type="button" onclick="changeVisibility()" class="bg-blue-500/80 hover:scale-110 duration-300 ease-in-out hover:bg-yellow-400 hover:text-blue-600 px-5 py-2 rounded-xl drop-shadow-xl">
                 Mengerti
             </button>
         </div>

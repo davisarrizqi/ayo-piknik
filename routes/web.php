@@ -12,3 +12,11 @@ Route::get('/register', [TrafficController::class, 'registerPage']);
 // post handler
 Route::post('/login', [UserController::class, 'loginHandler']);
 Route::post('/register', [UserController::class, 'registerHandler']);
+Route::post('/find', [TrafficController::class, 'findPlace']);
+
+// admin
+Route::get('/dashboard', [TrafficController::class, 'dashboard']);
+
+// debug page
+Route::get('/find', [TrafficController::class, 'findVisitation']);
+Route::get('/detail', [TrafficController::class, 'getDetail']);
