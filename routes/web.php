@@ -20,3 +20,4 @@ Route::get('/dashboard', [TrafficController::class, 'dashboard']);
 // debug page
 Route::get('/find', [TrafficController::class, 'findVisitation']);
 Route::get('/detail', [TrafficController::class, 'getDetail']);
+Route::get('/cart', [TrafficController::class, 'getCart']);

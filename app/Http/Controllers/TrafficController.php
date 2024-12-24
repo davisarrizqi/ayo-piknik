@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 
 class TrafficController extends Controller
 {
+    public function getCart():View{
+        return view('cart');
+    }
     public function getDetail(): View{
         return view('detail');
     }   
