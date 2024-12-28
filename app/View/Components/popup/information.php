@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\popup;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class popup-validation extends Component
+class information extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class popup-validation extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.popup-validation');
+        return view('components.popup.information');
     }
 }

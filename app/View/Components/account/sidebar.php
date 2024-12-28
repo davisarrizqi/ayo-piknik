@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\account;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class popup-submission extends Component
+class sidebar extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class popup-submission extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.popup-submission');
+        return view('components.account.sidebar');
     }
 }

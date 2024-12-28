@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\inline;
+namespace App\View\Components\invalid;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class invalid-message extends Component
+class message extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class invalid-message extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.inline.invalid-message');
+        return view('components.invalid.message');
     }
 }

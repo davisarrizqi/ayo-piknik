@@ -11,6 +11,25 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    protected $primaryKey = 'username';
+
+    public function balance(){
+        return $this->hasOne(Balance::class, 'username', 'username');
+    }
+
+    public function balance_accumulations(){
+        return $this->hasMany(BalanceAccumulations::class, 'username', 'username');
+    }
+
+    public function reservation_details(){
+        return $this->hasMany(Reservation::class, 'username', 'visitor_username');
+    }
+
+    public function refund(){
+        return $this->hasMany(Refund::class, 'username', 'username');
+    }
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +37,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'username',
         'name',
         'email',
         'password',

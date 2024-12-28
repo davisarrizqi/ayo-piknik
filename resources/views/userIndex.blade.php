@@ -8,7 +8,7 @@
     @vite('resources/css/app.css')
 </head>
 <body class="m-0 p-0 bg-black/10">
-    <x-navbar>
+    <x-navbar :user="$user">
         {{-- navbar here --}}
     </x-navbar>
     
@@ -22,89 +22,56 @@
         </div>
     </form>
 
-    <div class="max-w-[99%] mx-auto px-4 mt-16">
-        <div class="flex flex-col sm:flex-row items-center bg-white p-4 rounded shadow-md">
-            <div class="w-full sm:w-1/2 relative">
-                <div class="slider">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <img src="images/body/highlight-image-{{ $i }}.png" alt="Highlight Image {{ $i }}" class="w-full rounded slide">
-                    @endfor
-                </div>
-            </div>
-            <div class="sm:ml-4 mt-4 sm:mt-0">
-                <h2 class="text-2xl font-semibold mb-2">Explore Our Features</h2>
-                <p class="text-gray-700 mb-4">Discover the amazing features we offer to make your experience unforgettable.</p>
-                <button onclick="scrollToQNA()" class="bg-blue-500 text-white px-4 py-2 rounded">Learn More</button>
-            </div>
-        </div>
-    </div>
+    <div class="w-10/12 mx-auto mt-8">
+        <h2 class="text-2xl font-bold mb-4 text-left">Rekomendasi Destinasi</h2>
+        <div class="drop-shadow-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            @php $counter = 0;
+                $placesToShow = $places->count() > 7 ? $places->random(8) : $places->random(4);
+            @endphp
 
-    <style>
-        .slider {
-            position: relative;
-            overflow: hidden;
-        }
-        .slide {
-            position: absolute;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        .slide.active {
-            opacity: 1;
-        }
-    </style>
-
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.toggle('active', i === index);
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        setInterval(nextSlide, 3000); // Change slide every 3 seconds
-
-        document.addEventListener('DOMContentLoaded', () => {
-            showSlide(currentSlide);
-        });
-    </script>
-
-    <script>
-        function scrollToQNA() {
-            document.querySelector('#qna-section').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
-
-    <div id="qna-section" class="max-w-[99%] mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            @foreach (range(1, 10) as $index)
-                <div class="bg-white p-4 rounded shadow-md">
-                    <button class="w-full text-left font-semibold text-lg" onclick="toggleAnswer({{ $index }})">
-                        Question {{ $index }}
-                    </button>
-                    <div id="answer-{{ $index }}" class="mt-2 hidden">
-                        <p>This is the answer to question {{ $index }}.</p>
+            @foreach ($placesToShow as $place)
+                @php $counter++; @endphp
+                <a href="/detail/{{ $place->slug }}" class="relative cursor-pointer bg-white rounded shadow h-48 drop-shadow-2xl overflow-hidden">
+                    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $place->header_image }}');"></div>
+                    <div class="relative w-full h-full p-4 text-white/0 duration-500 ease-in-out hover:bg-black/50 hover:text-white">
+                        <h3 class="text-xl font-semibold mb-2">{{ $place->name }}</h3>
+                        <p class="hover:text-gray-200">{{ $place->place_details->city }}</p>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     </div>
 
+    <div class="w-10/12 mx-auto mt-16" id="contact">
+        <h2 class="text-2xl font-bold text-left">Hiburan dan Akses Informasi</h2>
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/3 py-4 drop-shadow-2xl">
+                <div class="rounded h-full">
+                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/episode/1zusmEevmKA2UR6q9qC2eY?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+            </div>
+            
+            <div class="w-full md:w-2/3 pl-4 py-4 flex items-stretch">
+                <div class="bg-white rounded shadow p-4 flex-grow">
+                    <h3 class="px-2 h-fit text-xl font-semibold mb-1">Akses Informasi Publik</h3>
+                    <p class="px-2 h-fit">Dukungan konsumen dan informasi publik dapat diakses melalui link ini</p>
+                    <div class="flex h-64">
+                        <div class="w-full p-2">
+                            <iframe class="w-full h-full" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15825.187071887156!2d109.22881134400622!3d-7.432375981252802!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655ea49d9f9885%3A0x62be0b6159700ec9!2sTelkom%20Purwokerto%20University!5e0!3m2!1sid!2sid!4v1735100339444!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <x-footer>
+        {{-- footer --}}
+    </x-footer>
+
     <script>
-        function toggleAnswer(index) {
-            const answer = document.getElementById(`answer-${index}`);
-            if (answer.classList.contains('hidden')) {
-                answer.classList.remove('hidden');
-            } else {
-                answer.classList.add('hidden');
-            }
+        function scrollToQNA() {
+            document.querySelector('#qna-section').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 

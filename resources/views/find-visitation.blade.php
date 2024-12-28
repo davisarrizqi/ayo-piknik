@@ -8,7 +8,11 @@
     @vite('resources/css/app.css')
 </head>
 <body class="m-0 p-0 bg-black/10">
-    <x-navbar>
+    <x-popup.common>
+        {{-- Content of the common popup --}}
+    </x-popup.common>
+    
+    <x-navbar :user="$user">
         {{-- navbar here --}}
     </x-navbar>
 
@@ -18,49 +22,40 @@
             <div class="flex">
                 <!-- Sidebar -->
                 <div class="w-1/4 p-4 bg-white shadow-md self-start">
-                    <h2 class="text-xl font-bold mb-4">Find Visitation</h2>
-                    <form>
+                    <h2 class="text-xl font-bold mb-4">Cari Tempat Wisata</h2>
+                    <form method="post" action="/find">
+                        @csrf
                         <div class="mb-7 relative">
-                            <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                            <input type="text" id="location" name="location" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" oninput="showRecommendations(this.value)">
-                            <div id="location-recommendations" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1"></div>
+                            <label for="search" class="block text-sm font-medium text-gray-700">Mau Cari Apa Nih?</label>
+                            <input type="text" id="search" name="search" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" oninput="showRecommendations(this.value)">
+                            <div id="search-recommendations" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1"></div>
                         </div>
-                        <div class="mb-7">
-                            <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                            <input type="date" id="date" name="date" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                        </div>
-                        <div class="mb-7">
-                            <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                            <select id="type" name="type" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                                <option value="">Select Type</option>
-                                <option value="type1">Type 1</option>
-                                <option value="type2">Type 2</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md">Filter</button>
+                        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md">
+                            Cari Sekarang
+                        </button>
                     </form>
                 </div>
 
                 <script>
                     function showRecommendations(keyword) {
                         const recommendations = [
-                            'Location 1',
-                            'Location 2',
-                            'Location 3',
-                            'Location 4',
-                            'Location 5'
+                            'Tempat Sejuk di Baturaden',
+                            'Pantai di Bali',
+                            'Target Wisata Pemalang',
+                            'Apa Saja di Yogyakarta',
+                            'Wisata Masa Lalu'
                         ];
 
-                        const filtered = recommendations.filter(location => location.toLowerCase().includes(keyword.toLowerCase()));
-                        const recommendationsDiv = document.getElementById('location-recommendations');
+                        const filtered = recommendations.filter(search => search.toLowerCase().includes(keyword.toLowerCase()));
+                        const recommendationsDiv = document.getElementById('search-recommendations');
                         recommendationsDiv.innerHTML = '';
 
-                        filtered.forEach(location => {
+                        filtered.forEach(search => {
                             const div = document.createElement('div');
-                            div.textContent = location;
+                            div.textContent = search;
                             div.classList.add('p-2', 'border-b', 'border-gray-300', 'cursor-pointer', 'hover:bg-gray-100');
                             div.onclick = () => {
-                                document.getElementById('location').value = location;
+                                document.getElementById('search').value = search;
                                 recommendationsDiv.innerHTML = '';
                             };
                             recommendationsDiv.appendChild(div);
@@ -75,23 +70,23 @@
                     }
 
                     document.addEventListener('click', function(event) {
-                        const recommendationsDiv = document.getElementById('location-recommendations');
-                        const locationInput = document.getElementById('location');
-                        if (!locationInput.contains(event.target) && !recommendationsDiv.contains(event.target)) {
+                        const recommendationsDiv = document.getElementById('search-recommendations');
+                        const searchInput = document.getElementById('search');
+                        if (!searchInput.contains(event.target) && !recommendationsDiv.contains(event.target)) {
                             recommendationsDiv.innerHTML = '';
                         }
                     });
                 </script>
 
-                <!-- Cards -->
-                <div class="w-3/4 px-4">
+                <!-- Cards Element Untuk Pengembangan -->
+                {{-- <div class="w-3/4 px-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-container">
                         @for ($i = 1; $i <= 18; $i++)
                             <div class="bg-white p-4 shadow-md rounded-md">
                                 <img src="https://asset.kompas.com/crops/5HTgtdqk1nAd9g8oj9lPHQyNUlU=/0x0:750x500/1200x800/data/photo/2023/07/13/64af70ba9e5c5.jpeg" alt="Card Image {{ $i }}" class="w-full h-48 object-cover rounded-md mb-4">
                                 <h3 class="text-lg font-bold mb-2">Card Title {{ $i }}</h3>
                                 <p class="text-gray-700 mb-4">Card content goes here.</p>
-                                <a href="#" class="inline-block bg-blue-500 text-white py-2 text-center w-full rounded-md">Lihat Detail</a>
+                                <a href="/detail" class="inline-block bg-blue-500 text-white py-2 text-center w-full rounded-md">Lihat Detail</a>
                             </div>
                         @endfor
                     </div>
@@ -112,8 +107,49 @@
                             </ul>
                         </nav>
                     </div>
-                </div>
+                </div> --}}
 
+                {{-- versi produksi --}}
+                <div class="w-3/4 px-4">
+                    @if ($places->count() == 0)
+                        <div class="w-full h-fit bg-white/60">
+                            <div class="flex w-10/12 m-auto">
+                                <img class="w-4/12" src="/custom/not-found.png" alt="">
+                                <div class="text-center my-auto ml-10 text-black/70">
+                                    <p class="text-3xl text-left font-bold">Waduh gak ketemu nih,</p>
+                                    <p class="text text-left">Indonesia luas loh, cari lain lagi yuk?</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-container">
+                        @foreach ($places as $place)
+                            <div class="bg-white p-4 shadow-md rounded-md">
+                                <img src="{{ $place->header_image }}" alt="Card Image {{ $loop->iteration }}" class="w-full h-48 object-cover rounded-md mb-4">
+                                <h3 class="text-lg font-bold mb-2">{{ $place->name }}</h3>
+                                <p class="text-gray-700 mb-4">{{ Str::limit($place->short_description, 76, '...') }}</p>
+                                <a href="/detail/{{ $place->slug }}" class="inline-block bg-blue-500 text-white py-2 text-center w-full rounded-md">Lihat Detail</a>
+                            </div>
+                        @endforeach
+                    </div>
+                    
+                    @if ($places->count() > 9)
+                    <div class="mt-10 mb-4">
+                        <nav class="flex justify-end">
+                            <ul class="inline-flex items-center -space-x-px" id="pagination">
+                                <li>
+                                    <a href="#" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700" onclick="changePage('prev')">Previous</a>
+                                </li>
+                                <li id="page-numbers"></li>
+                                <li>
+                                    <a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700" onclick="changePage('next')">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    @endif
+                </div>
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         const cards = Array.from(document.querySelectorAll('#cards-container > div'));

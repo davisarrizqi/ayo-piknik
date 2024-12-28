@@ -8,13 +8,21 @@
     @vite('resources/css/app.css')
 </head>
 <body class="m-0 p-0 bg-black/10">
-    <div class="w-screen h-screen flex">
+    <div class="w-screen h-screen flex relative">
         <div class="flex justify-around w-[75%] h-[75%] rounded-2xl shadow-xl bg-white m-auto">
             <div class="flex w-[40%] h-full rounded-2xl">
-                <form action="/login" class="w-[75%] m-auto">
+                <form method="post" action="/login" class="w-[75%] m-auto">
+                    @csrf
                     <div class="username-contextor w-full">
                         <label class="font-bold italic text-black/70" for="username">Username</label>
-                        <input class="mt-1 transition-all ease-in-out duration-300 focus:px-5 py-2 w-full border-b-2 outline-black/40" type="text" name="username" id="username" placeholder="username anda">
+                        <input class="mt-1 transition-all ease-in-out duration-300 focus:px-5 py-2 w-full border-b-2 outline-black/40" type="text" name="username" id="username" value="{{ old('username') }}" placeholder="username anda">
+                        
+                        
+                        @error('username')
+                        <p class="text-sm text-red-500 text-right">
+                            {{ $message }} 
+                        </p>
+                        @enderror 
                     </div>
 
                     <div class="password-contextor w-full mt-5">
@@ -27,6 +35,11 @@
                                 </button>
                             </div>
                         </div>
+                        @error('password')
+                        <p class="text-sm text-red-500 text-right">
+                            {{ $message }} 
+                        </p>
+                        @enderror 
                     </div>
 
                     <div class="login-contextor w-full mt-9 justify-between flex">
