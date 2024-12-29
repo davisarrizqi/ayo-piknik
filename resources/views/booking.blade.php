@@ -41,6 +41,8 @@
                     </button>
                 </div>
 
+                {{-- lorem ipsum dolor sit amet --}}
+
                 <script>
                     // catatan : untuk kedepannya, demi keamanan berikan validasi price sebelum mengirimkan link checkout
                     const pricePerUnit = {{ $place->price }};

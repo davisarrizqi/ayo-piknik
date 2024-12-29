@@ -213,7 +213,7 @@
             <div class="w-full">
                 <label for="uniqueness" class="flex justify-start text-xl font-medium text-black/80 px-4">
                     <p class="w-fit">Gambar Tempat Wisata</p>
-                </label>
+                </label> 
                 
                 <div class="w-full px-4 py-1">
                     <div class="image-upload-container w-full">
