@@ -33,7 +33,6 @@
                         <a href="/login" class="transition-500 ease-in-out duration-500 bg-blue-400/90 text-white/80 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Masuk Akun</a>
                         <a href="/register" class="transition-500 ease-in-out duration-500 bg-blue-400/90 text-white/80 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Daftar Sekarang</a>
                     </div>
-
                     @endif
                 </div>
             </div>
@@ -60,7 +59,7 @@
                 <div class="relative">
                     <button type="button" class="flex text-sm rounded-full drop-shadow-2xl outline outline-1 outline-black/20" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                         <span class="sr-only">Open user menu</span>
-                        <img class="h-8 w-8 rounded-full" src="/{{ $user->profile_image }}" alt="User Profile">
+                        <img class="object-cover h-8 w-8 rounded-full" src="/{{ $user->profile_image }}" alt="User Profile">
                     </button>
                     <div id="user-menu" class="hidden absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
                         <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Profil</a>

@@ -36,7 +36,9 @@
                         <label for="total" class="block text-sm font-medium text-gray-700">Total</label>
                         <input type="text" id="total" name="total" class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm" readonly>
                     </div>
-                    <button onclick="getCheckoutResponse()" type="button" class="mt-4 px-4 py-2 bg-blue-400 text-white rounded-md">Pesan Sekarang</button>
+                    <button onclick="getCheckoutResponse()" type="button" class="mt-4 px-4 py-2 bg-blue-400 text-white rounded-md">
+                        Pesan Sekarang
+                    </button>
                 </div>
 
                 <script>
@@ -68,6 +70,7 @@
                                 })
                             });
 
+                            // ketika kode response bukan 200
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
                             }

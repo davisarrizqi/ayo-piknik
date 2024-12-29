@@ -10,11 +10,16 @@ use Illuminate\Support\Facades\Session;
 
 class Doku extends Model
 {
-    private $clientID = 'BRN-0276-1735197850227';
-    private $secretKey = 'SK-Zgh4wmmjx0TZl4ajZf8j';
+    // akun ke 1
+    // private $clientID = 'BRN-0276-1735197850227';
+    // private $secretKey = 'SK-Zgh4wmmjx0TZl4ajZf8j';
+    
+    // akun ke 2
+    private $clientID = 'BRN-0201-1735203430712';
+    private $secretKey = 'SK-4X9QQugce3FPIKmZJ6q2';
     private $environmentURL = "https://api-sandbox.doku.com/checkout/v1/payment";
 
-    public function __construct($clientID = 'BRN-0276-1735197850227', $secretKey = 'SK-Zgh4wmmjx0TZl4ajZf8j')
+    public function __construct($clientID = 'BRN-0201-1735203430712', $secretKey = 'SK-4X9QQugce3FPIKmZJ6q2')
     {
         $this->clientID = $clientID;
         $this->secretKey = $secretKey;
@@ -22,14 +27,6 @@ class Doku extends Model
 
     public function createPayment(Request $request)
     {
-        // $table->integer('reservation_id')->primary();
-        //     $table->string('visitor_username')->nullable(false);
-        //     $table->foreign('visitor_username')->references('username')->on('users');
-        //     $table->integer('place_id')->nullable(false);
-        //     $table->foreign('place_id')->references('id')->on('places');
-        //     $table->integer('unit_price')->nullable(false);
-        //     $table->integer('quantity')->nullable(false);
-
         $reservation = new Reservation();
         $invoice_number = $reservation->generateInvoiceNumber();
         $reservation->booking_for = $request->booking_for;

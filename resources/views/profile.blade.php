@@ -18,13 +18,14 @@
         </x-account.sidebar>
 
         <div class="w-2/3">
-            <form class="flex promo-banner w-full h-72 bg-white/90 rounded-2xl drop-shadow-2xl mb-4">
+            <form action="/profile" method="post" enctype="multipart/form-data" class="flex promo-banner w-full h-72 bg-white/90 rounded-2xl drop-shadow-2xl mb-4">
+                @csrf
                 <div class="flex gap-4 w-10/12 my-auto">
                     <div class="w-1/2 flex flex-col items-center">
                         <div class="relative w-48 h-48 rounded-full overflow-hidden bg-gray-200 cursor-pointer drop-shadow-2xl">
                             {{-- reminder : change this --}}
                             <img id="image-preview" class="w-full h-full object-cover" src="{{ asset($user->profile_image) }}" alt="Image Preview">
-                            <input type="file" id="image" name="profile-image" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewImage(event)">
+                            <input type="file" id="image" name="profile_image" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewImage(event)">
                         </div>
                         <p class="text-center text-sky-800 mt-2">(Klik Gambar Untuk Ganti)</p>
                     </div>

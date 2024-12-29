@@ -23,15 +23,15 @@ class TrafficController extends Controller
         }
     }
 
-    public function loginPage():View {
+    public function loginPage() {
         if(!Session::has('username')) {
             return view('login');
-        } else return view('main');
+        } else return redirect('/');
     }
 
-    public function registerPage():View {
+    public function registerPage() {
         if(Session::has('username')) {
-            return view('main');
+            return redirect('/');
         } else return view('register');
     }
 
@@ -40,6 +40,8 @@ class TrafficController extends Controller
     }
 
     public function findLastPlace(){
+        $userController = new UserController();
+        if(!$userController->isUserLoggedIn()) return redirect('/login');
         $lastSearched = Session::get('last_searched');
         
         $searchTerms = explode(' ', $lastSearched);
@@ -64,11 +66,14 @@ class TrafficController extends Controller
             }
         })->get();
 
+        $data['user'] = User::where('username', Session::get('username'))->first();
         return view('find-visitation', $data);
     }
 
     // search indexing
     public function findPlace(Request $request){
+        $userController = new UserController();
+        if(!$userController->isUserLoggedIn()) return redirect('/login');
         $searchTerms = explode(' ', $request->search);
         $kataUmum = [
             'di', 'pada', 'ke', 'dari', 'yang', 'dan', 'atau', 
@@ -97,7 +102,8 @@ class TrafficController extends Controller
             $data['places'] = Place::where('name', 'like', "%{$request->search}%")
             ->where('short_description', 'like', "%$request->search%")
             ->where('created_at', 'like', "%$request->date_filter%")->get();
-        } Session::put('last_searched', $request->search);
+        } Session::put('last_searched', $request->search); 
+        $data['user'] = User::where('username', Session::get('username'))->first();
         return view('find-visitation', $data);
     }
 }

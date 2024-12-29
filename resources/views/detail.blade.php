@@ -69,24 +69,6 @@
             </div>
         </div>
 
-        {{-- development mode --}}
-        {{-- <form action="/checkout" method="post" class="w-1/2 bg-gray-100 drop-shadow-xl p-6 rounded-lg flex flex-col justify-between sticky top-24 h-fit">
-            @csrf
-            <div>
-                <div class="text-lg font-semibold text-gray-700">
-                    Tiket Masuk
-                </div>
-                <div class="text-2xl font-bold text-green-500 mt-2">
-                    <input type="hidden" name="price" value="{{ $place->price }}">
-                    {{ $place->price }}
-                </div>
-            </div>
-            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-white/70 hover:text-blue-600 ease-in-out transition-all duration-300">
-            Pesan Sekarang
-            </button>
-        </form> --}}
-
-        {{-- production --}}
         <div class="w-1/2 bg-gray-100 drop-shadow-xl p-6 rounded-lg flex flex-col justify-between sticky top-24 h-fit">
             <div>
                 <div class="text-lg font-semibold text-gray-700">

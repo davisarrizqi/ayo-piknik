@@ -11,6 +11,37 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
+    public function isUserLoggedIn(){
+        if(!Session::get('username')) return false;
+        else return true;
+    }
+
+    public function updateHandler(Request $request){
+        $user = User::where('username', Session::get('username'))->first();
+        
+        if($request->profile_image){
+            $user->profile_image = $request->profile_image;
+            $image = $request->file('profile_image');
+            $imageName = 'profile_image.' . $image->getClientOriginalExtension();
+            $imagePath = 'images/profile/' . md5($user->username) . '/' . $imageName;
+            $image->move(public_path('images/profile/' . md5($user->username)), $imageName);
+            $user->profile_image = $imagePath;
+            $user->save();
+        }
+
+        if($request->name) {
+            $user->name = $request->name;
+            $user->save();    
+        }
+
+        if($request->email) {
+            $user->email = $request->email;
+            $user->save();
+        }
+
+        return redirect('/profile');
+    }
+
     public function registerHandler(Request $request){
         $validated = $request->validate([
             'username' => 'required|max:50|unique:users,username',
@@ -46,7 +77,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
             Session::put('username', $request->username);
-            return redirect('/');
+            return redirect()->intended('/');
         } 
 
         else {
@@ -58,6 +89,7 @@ class UserController extends Controller
     }
 
     public function bookingPlace($slug){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['place'] = Place::where('slug', $slug)->first();
         $data['user'] = User::where('username', Session::get('username'))->first();
         return view('booking', $data);
@@ -84,7 +116,7 @@ class UserController extends Controller
                     Session::put('profile_image', $user->profile_image);
                     Session::put('last_searched', ' ');
                     $data['user'] = $user;
-                    return redirect('/')->with($data);
+                    return redirect()->intended('/')->with($data);
                 }
 
                 else {
@@ -100,25 +132,29 @@ class UserController extends Controller
                 ]);
             }
         }
-        return redirect('/');
+        return redirect()->intended('/login');
     }
 
-    public function getProfile(): View{
+    public function getProfile(){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
         return view('profile', $data);
     }
 
-    public function getHistory(): View{
+    public function getHistory(){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
         return view('history', $data);
     }
 
-    public function getCart(): View{
+    public function getCart(){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
         return view('cart', $data);
     }
 
-    public function getRefund(): View{
+    public function getRefund(){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
         return view('refund', $data);
     }

@@ -4,7 +4,7 @@
     <div class="pt-4 pb-0 w-[90%] mx-auto">
         <div class="user-identity mb-4 flex items-center">
             <div class="w-16 h-16 rounded-full bg-black/10 flex items-center justify-center mr-4 drop-shadow-2xl">
-                <img class="w-[85%] h-[85%] rounded-full drop-shadow-2xl" src="/{{ $user->profile_image }}" alt="User Image">
+                <img class="object-cover w-[85%] h-[85%] rounded-full drop-shadow-2xl" src="/{{ $user->profile_image }}" alt="User Image">
             </div>
             <div class="w-[13rem] ">
                 <h2 class="text-lg font-bold">{{ Str::limit($user->name, 17) }}</h2>

@@ -10,6 +10,11 @@ class Place extends Model
     protected $table = 'places';
     protected $primaryKey = 'id';
 
+    public function generate_slug($name){
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+        return $slug;
+    }
+
     public function place_details(){
         return $this->hasOne(PlaceDetail::class, 'place_id', 'id');
     }
