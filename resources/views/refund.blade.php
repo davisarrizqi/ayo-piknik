@@ -21,7 +21,7 @@
             </div>
         </div> --}}
 
-        <x-account.sidebar :user="$user">
+        <x-account.sidebar :user="$user" :reservation_details="$reservation_details">
             {{-- sidebar here --}}
         </x-account.sidebar>
 

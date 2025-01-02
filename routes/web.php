@@ -45,7 +45,11 @@ Route::get('/refund', [UserController::class, 'getRefund']);
 Route::get('/logout', [UserController::class, 'logoutHandler']);
 Route::get('/booking/{slug}', [UserController::class, 'bookingPlace']);
 
+// Booking Request
+Route::post('/request-booking', [UserController::class, 'sendBookingRequest']);
+
 // Payment Gateway
 Route::post('/checkout', [Doku::class, 'createPayment']);
 Route::post('/checkout/signature', [Doku::class, 'generateSignature']);
 Route::get('/checkout/status', [Doku::class, 'getPaymentStatus']);
+Route::get('/cart/{invoice_number}', [UserController::class, 'validatePayment']);

@@ -1,4 +1,4 @@
-@props(['user'])
+@props(['user', 'reservation_details'])
 
 <div class="w-1/3 bg-white pb-3 rounded-2xl drop-shadow-2xl">
     <div class="pt-4 pb-0 w-[90%] mx-auto">
@@ -11,7 +11,7 @@
                 <div class="w-full flex">
                     <p class="w-6/12 text-sm">Tiket Akumulasi</p>
                     <p class="w-2/12 text-sm text-center">:</p>
-                    <p class="w-4/12 text-sm font-bold">{{ $user->reservation_details->count() }}</p>
+                    <p class="w-4/12 text-sm font-bold">{{ $reservation_details->count() }}</p>
                 </div>
             </div>
         </div>
@@ -30,8 +30,8 @@
                     </td>
                     <td class="font-bold w-5/12 text-right">
                         Rp
-                        {{ $user->reservation_details->sum(function($reservation) {
-                            return $reservation->reservationDetails->unit_price * $reservation->reservationDetails->quantity;
+                        {{ $reservation_details->sum(function($reservation_unit) {
+                            return $reservation_unit->unit_price * $reservation_unit->quantity;
                         }) }}
                     </td>
                 </tr>

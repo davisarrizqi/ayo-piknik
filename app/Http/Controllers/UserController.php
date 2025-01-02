@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BalanceAccumulations;
 use App\Models\User;
 use App\Models\Place;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use App\Models\ReservationDetail;
+use Database\Seeders\ReservationDetailSeeder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -95,6 +99,40 @@ class UserController extends Controller
         return view('booking', $data);
     }
 
+    public function sendBookingRequest(Request $request){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
+        $validated = $request->validate([
+            'place_id' => 'required',
+            'price' => 'required',
+            'quantity' => 'required',
+            'booking_for' => 'required',
+        ]);
+
+        if($validated){
+            $reservation = new Reservation();
+            $invoice_number = $reservation->generateInvoiceNumber();
+            $reservation->booking_for = $request->booking_for;
+            $reservation->reservation_invoice = $invoice_number;
+            $reservation->save();
+
+            $reservation_detail = new ReservationDetail();
+            $reservation_detail->reservation_id = $reservation->id;
+            $reservation_detail->visitor_username = Session::get('username');
+            $reservation_detail->place_id = $request->place_id;
+            $reservation_detail->unit_price = $request->price;
+            $reservation_detail->quantity = $request->quantity;
+            $reservation_detail->save();
+
+            return redirect('/cart');
+        }
+
+        else {
+            return back()->withErrors([
+                'log' => 'There is an anomalies in your request',
+            ])->withInput();
+        }
+    }
+
     public function logoutHandler(){
         Session::forget('username');
         Session::forget('profile_image');
@@ -138,24 +176,41 @@ class UserController extends Controller
     public function getProfile(){
         if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
+        $data['reservation_details'] = ReservationDetail::where('visitor_username', Session::get('username'))->get();
         return view('profile', $data);
     }
 
     public function getHistory(){
         if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
+        $data['reservation_details'] = ReservationDetail::where('visitor_username', Session::get('username'))->get();
         return view('history', $data);
     }
 
     public function getCart(){
         if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
+        $data['reservation_details'] = ReservationDetail::where('visitor_username', Session::get('username'))->get();
         return view('cart', $data);
     }
 
     public function getRefund(){
         if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
+        $data['reservation_details'] = ReservationDetail::where('visitor_username', Session::get('username'))->get();
         return view('refund', $data);
+    }
+
+    public function validatePayment($invoice_number){
+        $reservation = Reservation::where('reservation_invoice', $invoice_number)->first();
+        $reservation->status = '1';
+        $reservation->save();
+
+        // add accumulation to user
+        $accumulation = BalanceAccumulations::where('username', Session::get('username'))->first();
+        $accumulation->balance += $reservation->total_price;
+        $accumulation->save();
+
+        return redirect('/cart');
     }
 }

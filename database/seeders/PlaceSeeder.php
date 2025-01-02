@@ -45,7 +45,7 @@ class PlaceSeeder extends Seeder
             'header_image' => 'images/body/highlight-image-4.png',
             'name' => 'Terasering Panyaweuyan',
             'short_description' => 'Terasering Panyaweuyan adalah sebuah sawah terasering yang terletak di Majalengka, Indonesia. Sawah ini memiliki pemandangan yang indah dan merupakan salah satu tempat wisata yang populer di Majalengka.',
-            'price' => 60000,
+            'price' => 1500,
             'slug' => 'terasering-panyaweuyan',
         ]);
 

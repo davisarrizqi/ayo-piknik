@@ -13,7 +13,7 @@
     </x-navbar>
 
     <div class="container w-[97%] mx-auto max-w-[70rem] flex justify-between gap-6 relative">
-        <x-account.sidebar :user="$user">
+        <x-account.sidebar :user="$user" :reservation_details="$reservation_details">
             {{-- sidebar here --}}
         </x-account.sidebar>
 

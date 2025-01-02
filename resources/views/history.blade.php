@@ -13,14 +13,14 @@
     </x-navbar>
 
     <div class="container w-[97%] mx-auto max-w-[70rem] flex justify-between gap-6 relative">
-        <x-account.sidebar :user="$user">
+        <x-account.sidebar :user="$user" :reservation_details="$reservation_details">
             {{-- sidebar here --}}
         </x-account.sidebar>
 
         <div class="w-2/3">
             <div class="ticket-history">
                 <h2 class="text-2xl font-bold mb-2">Histori Tiket Anda</h2>
-                @if ($user->reservation_details->count() == 0)
+                @if ($reservation_details->count() == 0)
                 <div class="no-ticket card flex justify-start bg-white rounded-lg shadow-md p-4 mb-4">
                     <div class="mr-4">
                         <img class="rounded-lg" src="https://ik.imagekit.io/tvlk/image/imageResource/2017/11/06/1509969696508-63e4a83e52864cf123f6cc7a9ee356fd.png?tr=q-75,w-175" alt="Sample Image">
@@ -34,7 +34,7 @@
 
                 @else
                     <div class="h-[40rem]" id="ticket-container">
-                        @foreach ($user->reservation_details as $reservation)
+                        @foreach ($reservation_details as $reservation)
                         <div class="relative have-ticket card flex justify-start hover:scale-105 hover:bg-white/80 transition-all ease-in-out duration-300 bg-white rounded-lg drop-shadow-2xl p-4 mb-4">
                             <a href="/" class="absolute w-full h-full"></a>
                             <div class="mr-4 w-1/4">
@@ -42,14 +42,14 @@
                             </div>
                             <div class="w-2/3">
                                 <div class="top-contextor h-2/3">
-                                    <h3 class="text-xl font-bold">{{ $reservation->reservationDetails->place->name }}</h3>
+                                    <h3 class="text-xl font-bold">{{ $reservation->place->name }}</h3>
                                     <p class="text-gray-700 w-11/12 text-sm">{{ $reservation->booking_for }}</p>
-                                    <p class="mb-2 w-11/12 text-blue-500 text-lg font-bold">{{ $reservation->reservationDetails->unit_price * $reservation->reservationDetails->quantity }}</p>
+                                    <p class="mb-2 w-11/12 text-blue-500 text-lg font-bold">{{ $reservation->unit_price * $reservation->quantity }}</p>
                                 </div>
 
                                 <div class="bottom-contextor h-1/3">
                                     <a href="/" class="bg-green-500 px-7 py-2 text-white rounded-lg font-bold text-sm">
-                                        {{ ($reservation->status == '0') ? 'Pembayaran Ditangguhkan' : 'Pembayaran Berhasil' }}
+                                        {{ ($reservation->reservation->status == '0') ? 'Pembayaran Ditangguhkan' : 'Pembayaran Berhasil' }}
                                     </a>
                                 </div>
                             </div>

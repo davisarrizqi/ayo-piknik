@@ -27,27 +27,13 @@ class Doku extends Model
 
     public function createPayment(Request $request)
     {
-        $reservation = new Reservation();
-        $invoice_number = $reservation->generateInvoiceNumber();
-        $reservation->booking_for = $request->booking_for;
-        $reservation->reservation_invoice = $invoice_number;
-        $reservation->save();
-
-        $reservation_detail = new ReservationDetail();
-        $reservation_detail->reservation_id = $reservation->id;
-        $reservation_detail->visitor_username = Session::get('username');
-        $reservation_detail->place_id = $request->place_id;
-        $reservation_detail->unit_price = $request->price;
-        $reservation_detail->quantity = $request->quantity;
-        $reservation_detail->save();
-
         $orderDetails = [
             'order' => [
-                'invoice_number' => $invoice_number,
+                'invoice_number' => $request->invoice_number,
                 'amount' => $request->price * $request->quantity,
                 'currency' => 'IDR',
-                'callback_url' => env('APP_URL') .'/cart',
-                'callback_url_cancel' => env('APP_URL') . '/find',
+                'callback_url' => env('APP_URL') .'/cart' . '/' . $request->invoice_number,
+                'callback_url_cancel' => env('APP_URL') . '/cart',
                 'callback_url_result' => env('APP_URL') .'/cart'
             ],
             'payment' => [

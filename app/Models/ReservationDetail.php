@@ -11,7 +11,7 @@ class ReservationDetail extends Model
 
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class, 'id', 'reservation_id');
+        return $this->belongsTo(Reservation::class, 'reservation_id', 'id');
     }
 
     public function user()
@@ -20,6 +20,6 @@ class ReservationDetail extends Model
     }
 
     public function place(){
-        return $this->belongsTo(Place::class, 'id', 'place_id');
+        return $this->belongsTo(Place::class, 'place_id', 'id');
     }
 }

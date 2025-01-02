@@ -8,11 +8,10 @@ class Reservation extends Model
 {
     protected $table = 'reservations';
     protected $primaryKey = 'id';
-    protected $guarded = ['id'];
 
     public function reservationDetails()
     {
-        return $this->hasMany(ReservationDetail::class, 'reservation_id', 'id');
+        return $this->hasMany(ReservationDetail::class, 'id', 'reservation_id');
     }
 
     public function generateInvoiceNumber()

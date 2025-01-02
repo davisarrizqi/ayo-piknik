@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             // data master
             AdminSeeder::class,
             PlaceSeeder::class,
-            ReservationSeeder::class,
+            // ReservationSeeder::class,
 
             // data transaksional
             BalanceAccumulationsSeeder::class,
@@ -44,8 +44,8 @@ class DatabaseSeeder extends Seeder
             PlaceFeaturesSeeder::class,
             PlaceUniquenessSeeder::class,
             PlaceImagesSeeder::class,
-            RefundSeeder::class,
-            ReservationDetailSeeder::class,
+            // RefundSeeder::class,
+            // ReservationDetailSeeder::class,
         ]);
     }
 }
