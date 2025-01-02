@@ -36,7 +36,6 @@
                     <div class="h-[40rem]" id="ticket-container">
                         @foreach ($reservation_details as $reservation)
                         <div class="relative have-ticket card flex justify-start hover:scale-105 hover:bg-white/80 transition-all ease-in-out duration-300 bg-white rounded-lg drop-shadow-2xl p-4 mb-4">
-                            <a href="/" class="absolute w-full h-full"></a>
                             <div class="mr-4 w-1/4">
                                 <img class="w-full rounded-lg object-cover drop-shadow-md" src="https://asset.kompas.com/crops/OMWdPdZFS8UpJpupQdojw_07ixk=/0x0:1000x667/1200x800/data/photo/2020/03/10/5e677a1b83e8d.jpg" alt="Sample Image">
                             </div>
@@ -48,9 +47,16 @@
                                 </div>
 
                                 <div class="bottom-contextor h-1/3">
-                                    <a href="/" class="bg-green-500 px-7 py-2 text-white rounded-lg font-bold text-sm">
+                                    <a class="bg-green-500 px-7 py-2 text-white rounded-lg font-bold text-sm">
                                         {{ ($reservation->reservation->status == '0') ? 'Pembayaran Ditangguhkan' : 'Pembayaran Berhasil' }}
                                     </a>
+                                    
+                                    @if ($reservation->reservation->status == '1')
+                                    <a href="/" class="hover:scale-150 transition-all ease-in-out duration-300 ml-3 bg-red-700 px-7 py-2 text-white rounded-lg font-bold text-sm">
+                                        Batalkan
+                                    </a>
+                                    @endif
+                                        
                                 </div>
                             </div>
                         </div>

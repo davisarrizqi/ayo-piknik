@@ -49,7 +49,7 @@
                 @else
                     @foreach ($reservation_details as $reservation_detail_unit)
                     <div class="relative have-ticket card flex justify-start hover:scale-105 hover:bg-white/80 transition-all ease-in-out duration-300 bg-white rounded-lg drop-shadow-2xl p-4 mb-4">
-                        <button onclick="getCheckoutResponse({{ $reservation_detail_unit->reservation_id }}, {{ $reservation_detail_unit->unit_price }}, {{ $reservation_detail_unit->quantity }})" class="absolute w-full h-full"></button>
+                        @if ($reservation_detail_unit->reservation->status == '0') <button onclick="getCheckoutResponse({{ $reservation_detail_unit->reservation_id }}, {{ $reservation_detail_unit->unit_price }}, {{ $reservation_detail_unit->quantity }})" class="absolute w-full h-full"></button> @endif
                         <div class="mr-4 w-1/4">
                             <img class="w-full rounded-lg object-cover drop-shadow-md" src="https://asset.kompas.com/crops/OMWdPdZFS8UpJpupQdojw_07ixk=/0x0:1000x667/1200x800/data/photo/2020/03/10/5e677a1b83e8d.jpg" alt="Sample Image">
                         </div>
