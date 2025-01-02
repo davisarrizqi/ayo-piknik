@@ -25,13 +25,17 @@ Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'loginPage']);
     Route::get('/logout', [AdminController::class, 'logoutHandler']);
     Route::get('/add', [AdminController::class, 'addPage']);
-    Route::get('/update', [AdminController::class, 'updatePage']);
     Route::get('/preview', [AdminController::class, 'findPage']);
-    Route::get('/preview/{slug}', [AdminController::class, 'dashboardPage']);
     
+    // admin main feature
+    Route::get('/preview/{slug}', [AdminController::class, 'previewPlace']);
     Route::post('/login', [AdminController::class, 'loginHandler']);
     Route::post('/add', [AdminController::class, 'addHandler']);
-    Route::post('/update', [AdminController::class, 'dashboardPage']);
+    
+    // admin update feature
+    Route::get('/update', [AdminController::class, 'findUpdatePage']);
+    Route::get('/update/{slug}', [AdminController::class, 'updatePage']);
+    Route::post('/update/request', [AdminController::class, 'updateRequest']);
 
     // refund
     Route::get('/refund/accept/{invoice_number}', [AdminController::class, 'acceptRefund']);

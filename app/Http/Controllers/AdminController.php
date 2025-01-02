@@ -6,12 +6,15 @@ use App\Models\Admin;
 use App\Models\Place;
 use App\Models\PlaceDetail;
 use App\Models\PlaceImages;
+use App\Models\Refund;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Models\PlaceFeatures;
+use App\Models\RefundMessage;
 use App\Models\PlaceUniqueness;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
+use App\Models\ReservationDetail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -39,6 +42,13 @@ class AdminController extends Controller
         // reminder : change this
         $data['places'] = Place::all();
         return view('admin.find', $data);
+    }
+
+    public function findPageForUpdate() {
+        if($this->safeAccountControl() == 500) return redirect('/admin/login');
+        else if($this->safeAccountControl() == 403) return redirect('/');
+        $data['places'] = Place::all();
+        return view('admin.find-update', $data);
     }
 
     public function addPage(){
@@ -126,10 +136,70 @@ class AdminController extends Controller
         } return redirect()->route('admin.dashboard')->with('success', 'Place added successfully.');
     }
 
-    public function updatePage(){
+    public function previewPlace($slug){
+        if($this->safeAccountControl() == 500) return redirect('/admin/login');
+        else if($this->safeAccountControl() == 403) return redirect('/'); 
+        
+        $data = [
+            'place' => Place::where('slug', $slug)->first(),
+            'places' => Place::limit(12)->get()
+        ]; return view('admin.preview', $data);
+    }
+
+    public function findUpdatePage(){
         if($this->safeAccountControl() == 500) return redirect('/admin/login');
         else if($this->safeAccountControl() == 403) return redirect('/');
-        return view('admin.update');
+        $data['places'] = Place::all();
+        return view('admin.findstr', $data);
+    }
+
+    public function updatePage($slug){
+        if($this->safeAccountControl() == 500) return redirect('/admin/login');
+        else if($this->safeAccountControl() == 403) return redirect('/');
+        $data['place'] = Place::where('slug', $slug)->first();
+        return view('admin.update', $data);
+    }
+
+    public function updateRequest(Request $request){
+        if($this->safeAccountControl() == 500) return redirect('/admin/login');
+        else if($this->safeAccountControl() == 403) return redirect('/');
+        if (strpos($request->maps, 'https://www.google.com/maps/') === false || strpos($request->maps, 'iframe') === false) {
+            return back()->withErrors(['maps' => 'The provided maps URL is not valid.']);
+        }
+        
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'city' => 'sometimes|string|max:255',
+            'price' => 'sometimes|numeric',
+            'short_description' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'header_image' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
+            'maps' => 'sometimes|string',
+        ]);
+
+
+        if($validated){
+            // data master place
+            $place = Place::where('slug', $request->slug)->first();
+
+            if($request->name) $place->name = $request->name;
+            if($request->short_description) $place->short_description = $request->short_description;
+            if($request->price) $place->price = $request->price;
+
+            if ($request->hasFile('header_image')) {
+                $headerImage = $request->file('header_image');
+                $headerImagePath = $headerImage->store('images/header', 'public');
+                $place->header_image = $headerImagePath;
+            } $place->save();
+            
+
+            // data transaksional place_details
+            $place_details = PlaceDetail::where('place_id', $place->id)->first();
+            if($request->description) $place_details->description = $request->description;
+            if($request->city) $place_details->city = $request->city;
+            if($request->maps) $place_details->maps = $request->maps;
+            $place_details->save();
+        } return redirect('/admin/dashboard')->with('success', 'Place updated successfully.');
     }
 
     public function loginPage() {
@@ -139,15 +209,26 @@ class AdminController extends Controller
     public function dashboardPage() {
         if($this->safeAccountControl() == 500) return redirect('/admin/login');
         else if($this->safeAccountControl() == 403) return redirect('/');
-        return view('admin.dashboard');
+        $data['refund_messages'] = RefundMessage::where('admin_username', Session::get('admin_username'))->get();
+        $data['admin'] = Admin::where('username', Session::get('admin_username'))->first();
+        $data['place_detail'] = PlaceDetail::where('admin_username', Session::get('admin_username'))->get();
+        $data['reservations'] = ReservationDetail::whereHas('place', function($query) {
+            $query->whereHas('place_details', function($query) {
+                $query->where('admin_username', Session::get('admin_username'));
+            });
+        })->get();
+        return view('admin.dashboard', $data);
     }
 
     public function getRefundPreview($invoice_number){
+        
         $invoice_number = (int) $invoice_number;
-        $reservation = Reservation::where('reservation_invoice', '=' , $invoice_number)->first();
-        $user = $reservation->reservation_detail->user;
-        dd($user);
-        return view('admin.refund-preview');
+        $data['reservation'] = Reservation::where('reservation_invoice', '=' , $invoice_number)->first();
+        $data['refund_messages'] = RefundMessage::where('reservation_invoice', $invoice_number)->get();
+        $data['user'] = $data['reservation']->reservation_detail->user;
+        $data['place'] = $data['reservation']->reservation_detail->place;
+        // return response()->json($user);
+        return view('admin.refund-preview', $data);
     }
 
     public function logoutHandler(){
@@ -184,5 +265,14 @@ class AdminController extends Controller
                 return back()->withErrors(['username' => 'The provided username does not exist.']);
             }
         }
+    }
+
+
+    public function acceptRefund($invoice_number){
+        $reservation_id = Reservation::where('reservation_invoice', $invoice_number)->first()->id;
+        $refunds = Refund::where('reservation_id', $reservation_id)->first();
+        $refunds->status = 1;
+        $refunds->save();
+        return redirect()->intended('/admin/dashboard');
     }
 }

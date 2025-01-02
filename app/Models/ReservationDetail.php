@@ -21,7 +21,7 @@ class ReservationDetail extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'username', 'visitor_username');
+        return $this->belongsTo(User::class, 'visitor_username', 'username');
     }
 
     public function place(){

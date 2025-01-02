@@ -12,8 +12,12 @@
         {{-- navbar --}}
     </x-admin.navbar>
 
-    <form method="post" action="/refund/send-message" class="container w-[97%] mx-auto max-w-[70rem] justify-between gap-6 relative">
-        @csrf
+    
+    <x-popup.admin>
+        {{-- admin popup --}}
+    </x-popup.admin>
+
+    <div method="post" action="/refund/send-message" class="container w-[97%] mx-auto max-w-[70rem] mt-10 justify-between gap-6 relative">
         <div class="w-full flex justify-between gap-10">
             <div class="w-2/3 rounded-2xl drop-shadow-2xl h-96">
                 {!! $place->place_details->maps !!}
@@ -46,36 +50,31 @@
                     <input type="number" name="reservation_invoice" value="{{ $reservation->reservation_invoice }}" class="hidden">
                     <input type="text" name="admin_username" value="{{ $place->place_details->admin_username }}" class="hidden">
                     <label for="pesan_pengembalian" class="block text-gray-700 text-2xl font-bold mb-3">Pesan Permintaan Pengembalian</label>
-                    <textarea id="pesan_pengembalian" name="pesan_pengembalian" class="bg-gray-400/10 text-black/70 w-full h-60 mt-1 p-2 border rounded" rows="4">
-Kepada Yth. Pihak Penyedia {{ $place->name }},
-Saya yang melakukan pengajuan pengembalian dana atas nama {{ $user->name }} dengan detail pemesanan sebagai berikut:
-
-- Tanggal Pemesanan: {{ $reservation->booking_for }}
-- Jumlah Tiket: {{ $reservation->reservation_detail->first()->quantity }}
-- Subtotal: {{ $reservation->reservation_detail->first()->unit_price * $reservation->reservation_detail->first()->quantity }}
-
-Dengan ini mengajukan permintaan pengembalian dana sebesar Rp. {{ $reservation->reservation_detail->first()->unit_price * $reservation->reservation_detail->first()->quantity }} dikarenakan alasan ... 
-Mohon segera diproses dan dikonfirmasi kembali kepada saya.
-
-Berikut adalah data untuk pengembalian dana:
-- Nama Bank: ...
-- Nomor Rekening: ...
-- Atas Nama: ...
-
-Demikian permintaan ini saya ajukan.
-Sekian dan Terima Kasih,
-
-
-Salam Hormat, {{ $user->name }}
-                    </textarea>
+                    <textarea readonly id="pesan_pengembalian" name="pesan_pengembalian" class="bg-gray-400/10 text-black/70 w-full mt-1 p-2 border rounded" rows="4" style="height:auto; overflow:hidden;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'">{{ $refund_messages->first()->message }}</textarea>
                 </div>
             </div>
 
-            <button class="w-full bg-blue-500 text-white p-3 rounded-b-2xl drop-shadow-2xl duration-300 ease-in-out transition-all hover:bg-blue-600">
-                Kirim Permintaan Pengembalian
+            <button type="button" onclick="showPopup()" class="w-full bg-blue-500 text-white p-3 rounded-b-2xl drop-shadow-2xl duration-300 ease-in-out transition-all hover:bg-blue-600">
+                Konfirmasi Pengembalian Dana
             </button>
         </div>
-    </form>
+    </div>
+    
+    <script>
+        document.querySelector('iframe').classList.add('w-full', 'h-full', 'rounded-2xl');
+        function showPopup(){
+            document.querySelector('#admin-confirmation').classList.remove('hidden');
+        }
+
+        function hidePopup(){
+            document.querySelector('#admin-confirmation').classList.add('hidden');
+        }
+
+        document.querySelector('#admin-confirmation-button').addEventListener('click', function(e){
+            e.preventDefault();
+            window.open('/admin/refund/accept/{{ $reservation->reservation_invoice }}', '_self');
+        });
+    </script>
 
     <x-admin.footer>
         {{-- footer --}}

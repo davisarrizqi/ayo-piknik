@@ -93,7 +93,7 @@
                                 <img src="/{{ $place->header_image }}" alt="Card Image {{ $loop->iteration }}" class="w-full h-48 object-cover rounded-md mb-4">
                                 <h3 class="text-lg font-bold mb-2">{{ $place->name }}</h3>
                                 <p class="text-gray-700 mb-4">{{ Str::limit($place->short_description, 76, '...') }}</p>
-                                <a href="/admin/preview/{{ $place->slug }}" class="inline-block bg-blue-500 text-white py-2 text-center w-full rounded-md">Live Preview</a>
+                                <a href="/admin/update/{{ $place->slug }}" class="inline-block bg-blue-500 text-white py-2 text-center w-full rounded-md">Update Web Ini</a>
                             </div>
                         @endforeach
                     </div>

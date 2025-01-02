@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class PlaceDetail extends Model
 {
     protected $table = 'place_details';
-    protected $primaryKey = 'place_id';
+    // protected $primaryKey = 'place_id';
     
     public function place(){
-        return $this->belongsTo(Place::class, 'id', 'place_id');
+        return $this->belongsTo(Place::class, 'place_id', 'id');
     }
 
     public function admin(){

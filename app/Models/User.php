@@ -11,7 +11,8 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    protected $primaryKey = 'username';
+    // protected $primaryKey = 'username';
+    // reminder : perhatikan ini ketika terdapat error
 
     public function balance(){
         return $this->hasOne(Balance::class, 'username', 'username');

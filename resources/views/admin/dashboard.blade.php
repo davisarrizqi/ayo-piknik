@@ -153,24 +153,31 @@
                     <thead>
                         <tr>
                             <th class="py-2 px-4 border-b">Invoice Number</th>
-                            <th class="py-2 px-4 border-b">Username</th>
+                            <th class="py-2 px-4 border-b">Atas Nama</th>
                             <th class="py-2 px-4 border-b">Untuk Tanggal</th>
                             <th class="py-2 px-4 border-b">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i=0;$i<10;$i++)
+                        @foreach ($refund_messages as $message)
                         <tr>
-                            <td class="py-2 px-4 border">#12345</td>
-                            <td class="py-2 px-4 border">John Doe</td>
-                            <td class="py-2 px-4 border">2023-10-01</td>
+                            <td class="py-2 px-4 border">{{ $message->reservation_invoice }}</td>
+                            <td class="py-2 px-4 border">{{ $message->reservation->reservation_detail->user->name }}</td>
+                            <td class="py-2 px-4 border">{{ $message->reservation->booking_for }}</td>
                             <td class="py-2 px-4 border flex">
-                                <a href="" class="bg-blue-400 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
+                                @if ($message->status == '0')
+                                <a href="/admin/refund/detail/{{ $message->reservation_invoice }}" class="bg-blue-400 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
                                     Pratinjau
                                 </a>
+
+                                @else
+                                <a class="bg-blue-800 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
+                                    Refund Berhasil
+                                </a>
+                                @endif
                             </td>
                         </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -180,21 +187,26 @@
                 <table class="min-w-full bg-white">
                     <thead>
                         <tr>
-                            <th class="py-2 px-4 border-b">Booking ID</th>
-                            <th class="py-2 px-4 border-b">User</th>
-                            <th class="py-2 px-4 border-b">Date</th>
+                            <th class="py-2 px-4 border-b">Invoice Number</th>
+                            <th class="py-2 px-4 border-b">Atas Nama</th>
+                            <th class="py-2 px-4 border-b">Booking Untuk</th>
                             <th class="py-2 px-4 border-b">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i=0;$i<10;$i++)
+                        @foreach ($reservations as $transaction)
                         <tr>
-                            <td class="py-2 px-4 border">#12345</td>
-                            <td class="py-2 px-4 border">John Doe</td>
-                            <td class="py-2 px-4 border">2023-10-01</td>
-                            <td class="py-2 px-4 border">Confirmed</td>
+                            <td class="py-2 px-4 border">{{ $transaction->reservation->reservation_invoice }}</td>
+                            <td class="py-2 px-4 border">{{ $transaction->user->name }}</td>
+                            <td class="py-2 px-4 border">{{ $transaction->reservation->booking_for }}</td>
+                            @if ($transaction->reservation->status == '0')
+                            <td class="py-2 px-4 border">Pembayaran Ditangguhkan</td>
+                            
+                            @elseif ($transaction->reservation->status == '1')
+                            <td class="py-2 px-4 border">Pembayaran Lunas</td>
+                            @endif
                         </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -206,16 +218,21 @@
             Top 4 Tempat Terpopuler Anda
         </h1>
 
+        @php $iteration = 0; @endphp
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @for ($col = 0; $col < 4; $col++)
-                <div class="bg-white p-5 rounded-lg shadow-md">
-                    <img src="https://via.placeholder.com/150" alt="Image" class="w-full h-32 object-cover rounded-md mb-4">
-                    <h2 class="text-xl font-semibold mb-2">Card Title</h2>
-                    <p class="text-gray-600 mb-4">Card description goes here. It provides a brief overview of the content.</p>
-                    <p class="text-2xl font-bold mb-4">999</p>
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Preview</button>
-                </div>
-            @endfor
+            @foreach ($place_detail as $detail)
+                @if ($iteration == 4) @break
+                @else
+                    <div class="bg-white p-5 rounded-lg shadow-md">
+                        <img src="/{{ $detail->place->header_image }}" alt="Image" class="w-full h-32 object-cover rounded-md mb-4">
+                        <h2 class="text-xl font-semibold mb-2">{{ $detail->place->name }}</h2>
+                        <p class="text-gray-600 mb-4">{{ Str::limit($detail->place->short_description, 56) }}</p>
+                        <p class="text-2xl font-bold mb-4">{{ $detail->place->price }}</p>
+                        <a class="bg-blue-500 text-white px-4 py-2 rounded-md">Preview</a>
+                    </div>
+                @endif
+                @php $iteration++; @endphp
+            @endforeach
         </div>
     </div>
 
