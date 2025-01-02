@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BalanceAccumulations;
 use App\Models\User;
 use App\Models\Place;
+use App\Models\Refund;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use App\Models\RefundMessage;
 use App\Models\ReservationDetail;
-use Database\Seeders\ReservationDetailSeeder;
 use Illuminate\Contracts\View\View;
+use App\Models\BalanceAccumulations;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Database\Seeders\ReservationDetailSeeder;
 
 class UserController extends Controller
 {
@@ -198,7 +200,52 @@ class UserController extends Controller
         if(!$this->isUserLoggedIn()) return redirect('/login');
         $data['user'] = User::where('username', Session::get('username'))->first();
         $data['reservation_details'] = ReservationDetail::where('visitor_username', Session::get('username'))->get();
+        $data['refunds'] = Refund::where('username', Session::get('username'))->get();
         return view('refund', $data);
+    }
+
+    public function getRefundDetail($invoice_number){
+        if(!$this->isUserLoggedIn()) return redirect('/login');
+        $data['user'] = User::where('username', Session::get('username'))->first();
+        $data['reservation'] = Reservation::where('reservation_invoice', $invoice_number)->first();
+        $data['place'] = Place::where('id', $data['reservation']->reservation_detail->first()->place_id)->first();
+        return view('refund-detail', $data);
+    }
+
+    public function postRefundRequest(Request $request){
+        $validated = $request->validate([
+            'reservation_invoice' => 'required',
+            'pesan_pengembalian' => 'required',
+            'admin_username' => 'required',
+        ]);
+
+        $message = new RefundMessage();
+        $message->reservation_invoice = $request->reservation_invoice;
+        $message->message = $request->pesan_pengembalian;
+        $message->admin_username = $request->admin_username;
+        $message->save();
+        $reservation = Reservation::where('reservation_invoice', $request->reservation_invoice)->first();
+        
+        $refund = new Refund();
+        $reservation_id = $reservation->id;
+        $username = $reservation->reservation_detail->visitor_username;
+        $refund->reservation_id = $reservation_id;
+        $refund->username = $username;
+        $refund->save();
+        return redirect('/refund');
+
+        
+        // untuk debug
+        // return response()->json([
+        //     'invoice_number' => $request->reservation_invoice,
+        //     'reservation_id' => $reservation_id,
+        //     'username' => $username,
+        //     'admin_username' => $request->admin_username,
+        //     'total_price' => $reservation->reservation_detail->quantity * $reservation->reservation_detail->unit_price,
+        //     'refund' => $refund,
+        //     'message' => $request->pesan_pengembalian,
+        // ], 200);
+
     }
 
     public function validatePayment($invoice_number){

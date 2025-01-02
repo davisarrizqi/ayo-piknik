@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Place;
 use App\Models\PlaceDetail;
 use App\Models\PlaceImages;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Models\PlaceFeatures;
 use App\Models\PlaceUniqueness;
@@ -139,6 +140,14 @@ class AdminController extends Controller
         if($this->safeAccountControl() == 500) return redirect('/admin/login');
         else if($this->safeAccountControl() == 403) return redirect('/');
         return view('admin.dashboard');
+    }
+
+    public function getRefundPreview($invoice_number){
+        $invoice_number = (int) $invoice_number;
+        $reservation = Reservation::where('reservation_invoice', '=' , $invoice_number)->first();
+        $user = $reservation->reservation_detail->user;
+        dd($user);
+        return view('admin.refund-preview');
     }
 
     public function logoutHandler(){

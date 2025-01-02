@@ -146,6 +146,35 @@
                     <p class="text-2xl">5</p>
                 </div>
             </div>
+
+            <div class="mt-16">
+                <h2 class="text-2xl font-bold mb-5">Daftar Permintaan Pembatalan</h2>
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">Invoice Number</th>
+                            <th class="py-2 px-4 border-b">Username</th>
+                            <th class="py-2 px-4 border-b">Untuk Tanggal</th>
+                            <th class="py-2 px-4 border-b">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for ($i=0;$i<10;$i++)
+                        <tr>
+                            <td class="py-2 px-4 border">#12345</td>
+                            <td class="py-2 px-4 border">John Doe</td>
+                            <td class="py-2 px-4 border">2023-10-01</td>
+                            <td class="py-2 px-4 border flex">
+                                <a href="" class="bg-blue-400 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
+                                    Pratinjau
+                                </a>
+                            </td>
+                        </tr>
+                        @endfor
+                    </tbody>
+                </table>
+            </div>
+
             <div class="mt-16">
                 <h2 class="text-2xl font-bold mb-5">Pemesanan Terakhir</h2>
                 <table class="min-w-full bg-white">
@@ -160,10 +189,10 @@
                     <tbody>
                         @for ($i=0;$i<10;$i++)
                         <tr>
-                            <td class="py-2 px-4 border-b">#12345</td>
-                            <td class="py-2 px-4 border-b">John Doe</td>
-                            <td class="py-2 px-4 border-b">2023-10-01</td>
-                            <td class="py-2 px-4 border-b">Confirmed</td>
+                            <td class="py-2 px-4 border">#12345</td>
+                            <td class="py-2 px-4 border">John Doe</td>
+                            <td class="py-2 px-4 border">2023-10-01</td>
+                            <td class="py-2 px-4 border">Confirmed</td>
                         </tr>
                         @endfor
                     </tbody>

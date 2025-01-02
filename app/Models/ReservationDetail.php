@@ -14,6 +14,11 @@ class ReservationDetail extends Model
         return $this->belongsTo(Reservation::class, 'reservation_id', 'id');
     }
 
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'reservation_id', 'reservation_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'username', 'visitor_username');

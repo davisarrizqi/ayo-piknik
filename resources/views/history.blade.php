@@ -13,6 +13,23 @@
     </x-navbar>
 
     <div class="container w-[97%] mx-auto max-w-[70rem] flex justify-between gap-6 relative">
+        <x-popup.refund>
+            {{-- refund here --}}
+        </x-popup.refund>
+
+        <script>
+            function showRefundPopup(invoice_number) {
+                document.getElementById('refund-popup').classList.remove('hidden');
+                document.getElementById('button-trigger').addEventListener('click', function () {
+                    window.location.href = `/refund/${invoice_number}`;
+                });
+            }
+
+            function closeRefundPopup() {
+                document.getElementById('refund-popup').classList.add('hidden');
+            } closeRefundPopup();
+        </script>
+        
         <x-account.sidebar :user="$user" :reservation_details="$reservation_details">
             {{-- sidebar here --}}
         </x-account.sidebar>
@@ -51,10 +68,10 @@
                                         {{ ($reservation->reservation->status == '0') ? 'Pembayaran Ditangguhkan' : 'Pembayaran Berhasil' }}
                                     </a>
                                     
-                                    @if ($reservation->reservation->status == '1')
-                                    <a href="/" class="hover:scale-150 transition-all ease-in-out duration-300 ml-3 bg-red-700 px-7 py-2 text-white rounded-lg font-bold text-sm">
+                                    @if ($reservation->reservation->status == '1' && $reservation->refund == null)
+                                    <button onclick="showRefundPopup({{ $reservation->reservation->reservation_invoice }})" class="hover:scale-110 transition-all ease-in-out duration-300 ml-3 bg-red-700 px-7 py-2 text-white rounded-lg font-bold text-sm">
                                         Batalkan
-                                    </a>
+                                    </button>
                                     @endif
                                         
                                 </div>

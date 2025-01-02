@@ -9,9 +9,14 @@ class Reservation extends Model
     protected $table = 'reservations';
     protected $primaryKey = 'id';
 
-    public function reservationDetails()
+    public function reservation_detail()
     {
-        return $this->hasMany(ReservationDetail::class, 'id', 'reservation_id');
+        return $this->hasOne(ReservationDetail::class, 'reservation_id', 'id');
+    }
+
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'reservation_id', 'id');
     }
 
     public function generateInvoiceNumber()

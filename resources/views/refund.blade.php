@@ -28,9 +28,8 @@
         <div class="w-2/3">
             <div class="ticket-history">
                 <h2 class="text-2xl font-bold mb-2">Histori Pengembalian Dana</h2>
-                
                 {{-- reminder : change this --}}
-                @if ($user->reservation_details->count() == 0)
+                @if ($refunds->count() == 0)
                 <div class="no-ticket card flex justify-start bg-white rounded-lg shadow-md p-4 mb-4">
                     <div class="mr-4">
                         <img class="rounded-lg" src="https://ik.imagekit.io/tvlk/image/imageResource/2017/11/06/1509969696508-63e4a83e52864cf123f6cc7a9ee356fd.png?tr=q-75,w-175" alt="Sample Image">
@@ -44,23 +43,30 @@
 
                 @else
                     <div class="h-[40rem]" id="ticket-container">
-                        @foreach ($user->refund as $refund)
+                        @foreach ($refunds as $refund)
                         <div class="relative have-ticket card flex justify-start hover:scale-105 hover:bg-white/80 transition-all ease-in-out duration-300 bg-white rounded-lg drop-shadow-2xl p-4 mb-4">
-                            <a href="/" class="absolute w-full h-full"></a>
+                            {{-- <a href="/" class="absolute w-full h-full"></a> --}}
                             <div class="mr-4 w-1/4">
                                 <img class="w-full rounded-lg object-cover drop-shadow-md" src="https://asset.kompas.com/crops/OMWdPdZFS8UpJpupQdojw_07ixk=/0x0:1000x667/1200x800/data/photo/2020/03/10/5e677a1b83e8d.jpg" alt="Sample Image">
                             </div>
                             <div class="w-2/3">
                                 <div class="top-contextor h-2/3">
-                                    <h3 class="text-xl font-bold">{{ $refund->reservation->reservationDetails->place->name }}</h3>
-                                    <p class="text-gray-700 w-11/12 text-sm">{{ $refund->reservation->booking_for }}</p>
-                                    <p class="mb-2 w-11/12 text-blue-500 text-lg font-bold">{{ $refund->reservation->reservationDetails->unit_price * $refund->reservation->reservationDetails->quantity }}</p>
+                                    <h3 class="text-xl font-bold">{{ $refund->reservations->reservation_detail->place->name }}</h3>
+                                    <p class="text-gray-700 w-11/12 text-sm">{{ $refund->reservations->booking_for }}</p>
+                                    <p class="mb-2 w-11/12 text-blue-500 text-lg font-bold">{{ $refund->reservations->reservation_detail->unit_price * $refund->reservations->reservation_detail->quantity }}</p>
                                 </div>
 
                                 <div class="bottom-contextor h-1/3">
-                                    <a href="/" class="bg-green-500 px-7 py-2 text-white rounded-lg font-bold text-sm">
-                                        {{ ($refund->status == '0') ? 'Refund Gagal' : 'Refund Berhasil' }}
-                                    </a>
+                                    @if ($refund->status == '0')
+                                    <button type="button" onclick="" class="bg-yellow-500 px-7 py-2 text-white rounded-lg font-bold text-sm">
+                                        Refund Tertunda
+                                    </button>
+
+                                    @elseif ($refund->status == '1')
+                                    <button type="button" onclick="" class="bg-green-500 px-7 py-2 text-white rounded-lg font-bold text-sm">
+                                        Refund Berhasil
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

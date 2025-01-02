@@ -32,6 +32,11 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminController::class, 'loginHandler']);
     Route::post('/add', [AdminController::class, 'addHandler']);
     Route::post('/update', [AdminController::class, 'dashboardPage']);
+
+    // refund
+    Route::get('/refund/accept/{invoice_number}', [AdminController::class, 'acceptRefund']);
+    Route::get('/refund/decline/{invoice_number}', [AdminController::class, 'declineRefund']);
+    Route::get('/refund/detail/{invoice_number}', [AdminController::class, 'getRefundPreview']);
 });
 
 // added page
@@ -41,7 +46,6 @@ Route::get('/cart', [UserController::class, 'getCart']);
 Route::get('/profile', [UserController::class, 'getProfile']);
 Route::post('/profile', [UserController::class, 'updateHandler']);
 Route::get('/history', [UserController::class, 'getHistory']);
-Route::get('/refund', [UserController::class, 'getRefund']);
 Route::get('/logout', [UserController::class, 'logoutHandler']);
 Route::get('/booking/{slug}', [UserController::class, 'bookingPlace']);
 
@@ -53,3 +57,8 @@ Route::post('/checkout', [Doku::class, 'createPayment']);
 Route::post('/checkout/signature', [Doku::class, 'generateSignature']);
 Route::get('/checkout/status', [Doku::class, 'getPaymentStatus']);
 Route::get('/cart/{invoice_number}', [UserController::class, 'validatePayment']);
+
+// Refund Request
+Route::get('/refund', [UserController::class, 'getRefund']);
+Route::get('/refund/{invoice_number}', [UserController::class, 'getRefundDetail']);
+Route::post('/refund/send-message', [UserController::class, 'postRefundRequest']);
