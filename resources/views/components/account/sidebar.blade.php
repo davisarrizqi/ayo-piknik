@@ -50,7 +50,7 @@
                     <td class="font-bold w-5/12 text-right">
                         Rp
                         {{ $user->refund->sum(function($refund_num) {
-                            return ($refund_num->reservations->reservationDetails->unit_price * $refund_num->reservations->reservationDetails->quantity);
+                            return ($refund_num->reservations->unit_price * $refund_num->reservations->quantity);
                         }) }}
                     </td>
                 </tr>

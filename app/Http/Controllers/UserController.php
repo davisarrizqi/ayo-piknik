@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function updateHandler(Request $request){
         $user = User::where('username', Session::get('username'))->first();
-        
+
         if($request->profile_image){
             $user->profile_image = $request->profile_image;
             $image = $request->file('profile_image');
@@ -255,8 +255,18 @@ class UserController extends Controller
 
         // add accumulation to user
         $accumulation = BalanceAccumulations::where('username', Session::get('username'))->first();
-        $accumulation->balance += $reservation->total_price;
-        $accumulation->save();
+        
+        if($accumulation){
+            $accumulation->balance += $reservation->reservation_detail->quantity * $reservation->reservation_detail->unit_price;
+            $accumulation->save();
+        }
+
+        else {
+            $accumulation = new BalanceAccumulations();
+            $accumulation->username = Session::get('username');
+            $accumulation->balance = $reservation->reservation_detail->quantity * $reservation->reservation_detail->unit_price;
+            $accumulation->save();
+        }
 
         return redirect('/cart');
     }

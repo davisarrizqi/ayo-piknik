@@ -14,9 +14,9 @@
 
     <form method="post" action="/request-booking" class="w-full h-full flex relative">
         @csrf
-        <x-poup.booking-popup>
+        <x-popup.booking>
             {{-- popup untuk konfirmasi pembayaran --}}
-        </x-poup>
+        </x-popup.booking>
 
         <div class="w-[75%] gap-3 flex justify-between h-96 m-auto">
             <div class="left-side w-7/12">

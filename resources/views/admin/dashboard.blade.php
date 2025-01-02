@@ -165,13 +165,13 @@
                             <td class="py-2 px-4 border">{{ $message->reservation->reservation_detail->user->name }}</td>
                             <td class="py-2 px-4 border">{{ $message->reservation->booking_for }}</td>
                             <td class="py-2 px-4 border flex">
-                                @if ($message->status == '0')
-                                <a href="/admin/refund/detail/{{ $message->reservation_invoice }}" class="bg-blue-400 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
+                                @if ($all_reservations->where('reservation_invoice', $message->reservation_invoice)->first()->refund->status == '0')
+                                <a href="/admin/refund/detail/{{ $message->reservation_invoice }}" class="min-w-44 text-center bg-blue-400 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
                                     Pratinjau
                                 </a>
 
                                 @else
-                                <a class="bg-blue-800 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
+                                <a class="min-w-44 text-center bg-blue-800 mx-auto px-4 py-2 text-white rounded-lg drop-shadow-2xl">
                                     Refund Berhasil
                                 </a>
                                 @endif

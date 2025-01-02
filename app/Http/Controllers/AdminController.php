@@ -217,6 +217,7 @@ class AdminController extends Controller
                 $query->where('admin_username', Session::get('admin_username'));
             });
         })->get();
+        $data['all_reservations'] = Reservation::all();
         return view('admin.dashboard', $data);
     }
 

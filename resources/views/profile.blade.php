@@ -36,10 +36,10 @@
                         </div>
                         <div class="email-contextor w-full">
                             <label class="flex font-bold" id="email-label" for="email">Email Baru<div id="email-invalid-label" class="text-red-500 animate-form-invalid-danger"></div></label>
-                            <input class="focus:outline-none mt-1 transition-all ease-in-out duration-300 focus:px-5 py-2 w-full border-b-2 outline-black/40 bg-transparent" type="text" name="email" id="email" placeholder="Contoh : yokafathoni@gmail.com">
+                            <input class="focus:outline-none mt-1 transition-all ease-in-out duration-300 focus:px-5 py-2 w-full border-b-2 outline-black/40 bg-transparent" type="text" name="email" id="email" placeholder="Contoh : widiaayu@gmail.com">
                         </div>
                         <div class="email-contextor w-full">
-                            <button class="w-full py-2 drop-shadow-2xl bg-blue-400 hover:bg-blue-400/80 hover:scale-110 duration-500 transition-all text-white rounded-lg mt-4" type="submit">
+                            <button type="submit" class="w-full py-2 drop-shadow-2xl bg-blue-400 hover:bg-blue-400/80 hover:scale-110 duration-500 transition-all text-white rounded-lg mt-4" type="submit">
                                 Lakukan Perubahan
                             </button>
                         </div>
